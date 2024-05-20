@@ -1,0 +1,837 @@
+<!-- templates/index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>abc 출고 시스템</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+        <!-- 파비콘 추가 -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Ctext x='150' y='220' font-family='Arial' font-size='200' font-weight='bold' fill='%23004488' text-anchor='middle'%3EC%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+    <link rel="shortcut icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Ctext x='150' y='220' font-family='Arial' font-size='200' font-weight='bold' fill='%23004488' text-anchor='middle'%3EC%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+        // 품목 토글 버튼 클릭 이벤트 핸들러
+        function toggleItems(groupedItemId) {
+            // 해당 그룹의 품목들을 토글
+            var itemsContainer = document.getElementById('items-container-' + groupedItemId);
+            itemsContainer.classList.toggle('d-none');
+
+            // 대표값 수량 표시 여부 토글
+            var quantityContainer = document.getElementById('quantity-container-' + groupedItemId);
+            quantityContainer.classList.toggle('d-none');
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        
+        :root {
+            --primary-color: #4a76a8; /* 주 색상 */
+            --secondary-color: #e9ecef; /* 보조 색상 */
+            --text-color: #333; /* 텍스트 색상 */
+        }
+        .sidebar {
+            height: 100%;
+            width: 50px; /* 축소된 상태의 너비 */
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: var(--primary-color); /* 새로운 색상 사용 */
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px; /* 로고와 아이콘 위한 상단 패딩 조정. 필요에 따라 값을 조정하세요. */
+        }
+
+        .sidebar-logo {
+            width: 100%; /* 로고가 사이드바 너비에 맞춰지도록 설정 */
+            height: 60px; /* 로고 높이 설정 */
+            background: url('/static/123.png') no-repeat center center;
+            background-size: contain; /* 로고 크기가 적절히 조절되도록 */
+            transition: width 0.5s; /* 사이드바 확장과 동일한 속도로 너비 변화 */
+        }
+
+        .sidebar a {
+            position: relative; /* 상대 위치 지정 */
+            padding-left: 50px; /* 아이콘과 텍스트 사이의 충분한 간격 확보 */
+            text-decoration: none;
+            font-size: 16px;
+            color: var(--secondary-color); /* 변경된 색상 사용 */
+            display: block; /* 블록 레벨 요소로 변경하여 가로 전체를 차지하게 함 */
+            transition: 0.3s;
+            height: 40px; /* 버튼 높이 고정 */
+            line-height: 40px; /* 텍스트를 버튼 중앙에 위치시킴 */
+        }
+
+        .sidebar a i {
+            position: absolute;
+            left: 0;
+            top: 50%; /* 상단에서 50% 떨어진 위치에 배치 */
+            transform: translateY(-50%); /* Y축으로 -50% 만큼 이동하여 수직 중앙에 위치 */
+            width: 50px;
+            text-align: center;
+        }
+        
+        .sidebar-text {
+            display: none; /* 축소 상태에서 텍스트 숨김 */
+            margin-left: 10px; /* 아이콘과 텍스트 간격 */
+            white-space: nowrap; /* 텍스트가 사이드바를 확장할 때 줄바꿈되지 않도록 설정 */
+        }
+
+        .sidebar:hover {
+            width: 200px; /* 확장된 상태의 너비 */
+        }
+
+        .sidebar:hover .sidebar-text {
+            display: inline; /* 확장 상태에서 텍스트 표시 */
+        }
+
+        .main-content {
+            padding: 20px;
+        }
+
+        /* 사이드바 확장 시 메인 컨텐츠 이동 */
+        .sidebar:hover + .main-content {
+            margin-left: 200px; /* 확장된 사이드바 너비에 맞춰 조정 */
+        }
+        .sidebar a:hover, .sidebar a:focus {
+            background-color: #365f85; /* 상호작용 시 배경색 변경 */
+            color: #ffffff; /* 상호작용 시 텍스트 색상 변경 */
+        }
+        .sidebar-top {
+            position: absolute; /* 사이드바 상단에 고정 */
+            top: 0;
+            left: 0;
+            width: 100%;
+            font-size: 20px;
+            text-align: center; /* 텍스트 중앙 정렬 */
+            padding: 10px 0; /* 상단 텍스트 영역 패딩 */
+            background-color: var(--primary-color); /* 이전 색상(#333)에서 새로운 주 색상으로 변경 */
+            color: var(--secondary-color); /* 텍스트 색상도 조정 */
+        }
+
+        .sidebar-footer {
+            position: absolute; /* 사이드바 내에서 절대 위치 지정 */
+            bottom: 0; /* 하단에 위치 */
+            width: 100%; /* 사이드바 너비와 동일하게 설정 */
+            text-align: center; /* 텍스트 중앙 정렬 */
+            padding: 10px 0; /* 상하 패딩으로 문구와 사이드바 경계 간 여백 생성 */
+            color: var(--secondary-color); /* 사이드바 텍스트 색상과 일치시키거나 적절히 조정 */
+            background-color: var(--primary-color); /* 필요에 따라 배경색 지정 */
+            font-size: 0.75em; /* 텍스트 크기 조정 */
+        }
+        .sidebar-icon {
+            /* 아이콘 스타일링 (색상, 크기 등) */
+            color: #fff; /* 아이콘 색상 */
+            margin-right: 10px; /* 텍스트와의 간격 */
+        }
+
+        .sidebar-brand {
+            display: inline-block;
+            color: #fff; /* 텍스트 색상 */
+            font-weight: bold;
+            /* 확장 시에만 텍스트 표시 */
+            display: none;
+        }
+
+        .sidebar:hover .sidebar-brand {
+            display: inline-block; /* 확장된 상태에서 텍스트 표시 */
+        }
+        .sidebar-logo, .sidebar-top {
+            height: 80px; /* 로고와 상단 텍스트 영역의 높이를 조정하여 더 많은 공간 확보 */
+        }
+        /* 기본 상태에서는 카피라이트 문구 숨김 */
+        .copy-right {
+            display: none;
+        }
+        /* 사이드바 확장 시 카피라이트 문구 표시 */
+        .sidebar:hover .copy-right {
+            display: block;
+        }
+        h2 {
+            font-family: 'Nunito', sans-serif;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4; /* 배경색 변경 */
+            color: #333; /* 기본 텍스트 색상 변경 */
+        }
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: #365f85; /* 버튼 호버 색상 변경 */
+            border-color: #365f85;
+        }
+        .navbar {
+            padding: 0.2rem 1rem; /* 기존의 20px 패딩에서 더 얇은 패딩으로 조정 */
+            margin-left: 50px; /* 사이드바 너비에 맞추어 네비게이션 바의 좌측 마진 조정 */
+            margin-top: 0px; /* 필요에 따라 상단 마진을 조정할 수 있습니다 */
+        }
+        /* 테이블 내의 버튼 스타일 조정 */
+        .table .btn-link {
+            padding: 0; /* 버튼의 패딩 제거 */
+            margin: 0; /* 필요한 경우 마진도 조정 */
+            font-size: inherit; /* 테이블 내의 다른 텍스트와 동일한 폰트 사이즈 사용 */
+            text-align: left; /* 텍스트 정렬을 왼쪽으로 설정 */
+        }
+        .search-results {
+            position: absolute;
+            background-color: #fff;
+            width: calc(100% - 12px); /* 컨테이너 너비 조정 */
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 2; /* 다른 요소 위에 표시되도록 z-index 조정 */
+        }
+        .search-result-item.active {
+            background-color: #f0f0f0; /* 예시 색상 */
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 0;
+                visibility: hidden;
+            }
+            .sidebar.active {
+                width: 200px;
+                visibility: visible;
+            }
+            .main-content, .navbar, footer {
+                margin-left: 0;
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            .toggle-sidebar-btn {
+                display: inline-block;
+                margin: 10px;
+                z-index: 2;
+                position: fixed;
+                top: 0;
+                left: 0;
+            }
+        }
+        .navbar-toggler {
+            margin-left: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- 나중에 쓰자 이거 <button class="toggle-sidebar-btn" style="display:none;" onclick="toggleSidebar()">☰</button> -->
+    <div id="sidebar" class="sidebar">
+        <!-- 사이드바 상단에 "abc" 텍스트와 아이콘 추가 -->
+        <div class="sidebar-top">
+            <span class="sidebar-brand">abc</span>
+        </div>
+        <a href="/"><i class="fas fa-shipping-fast"></i><span class="sidebar-text">출고관리</span></a>
+        <a href="/data-query"><i class="fas fa-database"></i><span class="sidebar-text">데이터조회</span></a>
+        <div class="sidebar-footer">
+            <p class="copy-right">© 2024 abc Inc.</p>
+        </div>
+    </div>
+    <!-- 네비게이션바에서 로고 관련 코드 제거 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="margin-left: 50px;"> <!-- 사이드바 너비만큼 네비게이션 바 좌측 마진 추가 -->
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- 로고 관련 코드 제거 -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    {% if current_user %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{ current_user2 }}
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                                {% if is_admin %}
+                                    <a class="dropdown-item" href="/admin/">관리자 페이지</a>
+                                {% endif %}
+                                <a class="dropdown-item" href="/logout/">로그아웃</a>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login/">로그인</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/register/">회원가입</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="main-content">
+        <div class="container">
+            <h2>출고 관리</h2>
+            <form action="/add_item/" method="post" class="mt-3">
+                <!-- 추가된 부분: 화물유형 드롭다운 -->
+                <div class="form-group">
+                    <label for="cargo_type">화물유형</label>
+                    <select id="cargo_type" name="cargo_type" class="form-control" required>
+                        <option value="우리차">우리차</option>
+                        <option value="화물">화물</option>
+                        <option value="함바">함바</option>
+                        <option value="대신택배">대신택배</option>
+                        <option value="기타">기타</option>
+                    </select>
+                </div>
+                <!-- 추가된 부분: 기타 텍스트 표시 엘리먼트 -->
+                <div id="customCargoTypeDisplay" class="form-group" style="display: none; font-size: 0.9em;">
+                    <label for="customCargoType"></label>
+                    <span id="customCargoType"></span>
+                </div>
+                <!-- 기존 폼 요소들 -->
+                <div class="form-group">
+                    <label for="vendor">발주처</label>
+                    <input type="text" id="vendor" name="vendor" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="address">주소</label>
+                    <input type="text" id="address" name="address" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="recipient">수신자 성명</label>
+                    <input type="text" id="recipient" name="recipient" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="phone_number">전화번호</label>
+                    <input type="text" id="phone_number" name="phone_number" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="note">비고</label>
+                    <input type="text" id="note" name="note" class="form-control">
+                </div>      
+                <!-- "품목" 입력란 -->
+                <div class="form-row">
+                    <div class="form-group col-5">
+                        <label for="product">품목</label>
+                        <input type="text" id="product" name="product[]" class="form-control product-input" required autocomplete="off" data-item-id="0">
+                        <div class="search-results mt-2" data-item-id="0"></div> <!-- 첫 번째 행의 검색 결과 -->
+                    </div>
+                    <div class="form-group col-5">
+                        <label for="quantity">수량</label>
+                        <input type="number" name="quantity[]" class="form-control" required>
+                    </div>
+                </div>
+
+                <!-- 품목 추가 버튼 -->
+                <button type="button" class="btn btn-secondary" id="remove-item-btn" style="display: none;">품목 삭제</button>
+                <button type="button" class="btn btn-secondary" id="add-item-btn">품목 추가</button>
+                <button type="submit" class="btn btn-primary">출고</button>
+            </form>
+            <a href="/download_csv/" class="btn btn-success float-right">
+                <i class="bi bi-download"></i>excel
+            </a>
+            <table class="table mt-5">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 20%;"><span class="d-none d-md-inline">입력시간</span><i class="fas fa-clock d-inline d-md-none"></i></th>
+                        <th scope="col"><span class="d-none d-md-inline">등록자</span><i class="fas fa-user d-inline d-md-none"></i></th>
+                        <th scope="col"><span class="d-none d-md-inline">화물유형</span><i class="fas fa-box d-inline d-md-none"></i></th>
+                        <th scope="col"><span class="d-none d-md-inline">발주처</span><i class="fas fa-building d-inline d-md-none"></i></th>
+                        <th scope="col" style="width: 30%;"><span class="d-none d-md-inline">품목 및 수량</span><i class="fas fa-list-ol d-inline d-md-none"></i></th>
+                        <th scope="col"><span class="d-none d-md-inline">상태</span><i class="fas fa-info-circle d-inline d-md-none"></i></th>
+                        <th scope="col"><span class="d-none d-md-inline">상세보기</span><i class="fas fa-search-plus d-inline d-md-none"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for grouped_item in inventory %}
+                        <tr>
+                            <td>{{ grouped_item.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                            {% if grouped_item.items %}
+                                <td>{{ grouped_item.items[0].username }} {{ grouped_item.items[0].position }}</td> <!-- 첫 번째 item의 사용자 이름을 표시 -->
+                            {% else %}
+                                <td>N/A</td> <!-- items가 비어있는 경우 처리 -->
+                            {% endif %}
+                            <td>{{ grouped_item.cargo_type }}</td>
+                            <td>{{ grouped_item.vendor }}</td>
+                            <td>
+                                <!-- "확인" 버튼을 누르면 숨겨진 컨테이너에 있는 모든 품목과 수량이 표시됩니다. -->
+                                <a href="javascript:void(0)" onclick="toggleItems({{ grouped_item.id }})">확인</a>
+                                <div id="items-container-{{ grouped_item.id }}" class="d-none">
+                                    {% for item in grouped_item.items %}
+                                        <p>
+                                            {{ item.product }} - {{ item.quantity }}
+                                            <span class="{% if item.status == '출고대기' %}text-warning{% elif item.status == '출고완료' %}text-success{% else %}text-danger{% endif %}">
+                                                ({{ item.status }})
+                                            </span>
+                                        </p>
+                                    {% endfor %}
+                                </div>
+                            </td>
+                            <td>
+                                <span class="{% if grouped_item.aggregated_status == '출고대기' %}text-warning{% elif grouped_item.aggregated_status == '출고완료' %}text-success{% else %}text-primary{% endif %}">
+                                    {{ grouped_item.aggregated_status }}
+                                </span>
+                            </td>
+                            <td>
+                                <!-- Add 'Details' button -->
+                                <a href="#" onclick="showDetails(event, this)"
+                                data-address="{{ grouped_item.items[0].address }}"
+                                data-recipient="{{ grouped_item.items[0].recipient }}"
+                                data-phone-number="{{ grouped_item.items[0].phone_number }}"
+                                data-note="{{ grouped_item.items[0].note }}">상세보기</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- 페이지네이션 추가 -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    {% if page > 1 %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page - 1 }}&size={{ size }}">이전</a>
+                        </li>
+                    {% endif %}
+                    {% set max_pages = 5 %}
+
+                    {# Calculate the starting page number #}
+                    {% set start_page = 1 %}
+                    {% if page > (total_pages - max_pages // 2) %}
+                        {% set start_page = total_pages - max_pages + 1 %}
+                    {% endif %}
+                    {% if start_page < 1 %}
+                        {% set start_page = 1 %}
+                    {% endif %}
+
+                    {# Calculate the ending page number #}
+                    {% set end_page = start_page + max_pages - 1 %}
+                    {% if end_page > total_pages %}
+                        {% set end_page = total_pages %}
+                    {% endif %}
+
+                    {# Render the pagination links for the calculated range #}
+                    {% for p in range(start_page, end_page + 1) %}
+                        <li class="page-item {% if p == page %}active{% endif %}">
+                            <a class="page-link" href="?page={{ p }}&size={{ size }}">{{ p }}</a>
+                        </li>
+                    {% endfor %}
+                    {% if page < total_pages %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page + 1 }}&size={{ size }}">다음</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <script>
+        function showDetails(event, element) {
+            event.preventDefault(); // 링크의 기본 동작 중단
+        
+            var address = element.getAttribute('data-address');
+            var recipient = element.getAttribute('data-recipient');
+            var phoneNumber = element.getAttribute('data-phone-number');
+            var note = element.getAttribute('data-note');
+        
+            // Display the details
+            alert("주소: " + address + "\n수신자 성명: " + recipient + "\n전화번호: " + phoneNumber + "\n비고: " + note);
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let itemId = 0; // Unique ID for each item entry for targeted search results
+    
+            // 디바운싱 함수 정의
+            function debounce(func, wait, immediate) {
+                var timeout;
+                return function() {
+                    var context = this, args = arguments;
+                    var later = function() {
+                        timeout = null;
+                        if (!immediate) func.apply(context, args);
+                    };
+                    var callNow = immediate && !timeout;
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                    if (callNow) func.apply(context, args);
+                };
+            }
+    
+            document.getElementById('add-item-btn').addEventListener('click', function() {
+                itemId++; // Increment unique ID for the new item
+        
+                const newItemRow = document.createElement('div');
+                newItemRow.className = 'form-row'; // 이 클래스가 한 행에 요소를 나란히 배치합니다.
+        
+                const productInputDiv = document.createElement('div');
+                productInputDiv.className = 'form-group col-md-5';
+                productInputDiv.innerHTML = `
+                    <input type="text" name="product[]" class="form-control product-input" required autocomplete="off" data-item-id="${itemId}">
+                    <div class="search-results" data-item-id="${itemId}" style="position: absolute; z-index: 1; width: 100%;"></div>
+                `;
+        
+                const quantityInputDiv = document.createElement('div');
+                quantityInputDiv.className = 'form-group col-md-5';
+                quantityInputDiv.innerHTML = `
+                    <input type="number" name="quantity[]" class="form-control" required>
+                `;
+        
+                const removeButtonDiv = document.createElement('div');
+                removeButtonDiv.className = 'form-group col-md-2';
+                removeButtonDiv.innerHTML = `
+                    <button type="button" class="btn btn-secondary remove-item" style="position: sticky; top: 0;">삭제</button>
+                `;
+        
+                newItemRow.appendChild(productInputDiv);
+                newItemRow.appendChild(quantityInputDiv);
+                newItemRow.appendChild(removeButtonDiv);
+        
+                document.querySelector('form').insertBefore(newItemRow, this);
+        
+                attachSearchListener(newItemRow.querySelector('.product-input'));
+            });
+
+            let currentActiveIndex = -1;
+            let searchResultsItems = [];
+        
+            function clearActiveSearchItem() {
+                searchResultsItems.forEach(item => item.classList.remove('active'));
+                currentActiveIndex = -1; // 인덱스 초기화
+            }
+        
+            function updateActiveSearchItem(index) {
+                clearActiveSearchItem();
+                if (index >= 0 && index < searchResultsItems.length) {
+                    const activeItem = searchResultsItems[index];
+                    activeItem.classList.add('active');
+                    currentActiveIndex = index;
+            
+                    // 선택된 항목이 사용자에게 보이도록 스크롤
+                    activeItem.scrollIntoView({
+                        behavior: "smooth", // 부드러운 스크롤
+                        block: "nearest", // 가장 가까운 스크롤 위치
+                        inline: "start"
+                    });
+                }
+            }
+
+            // Attach search functionality to each product input
+            document.querySelectorAll('.product-input').forEach(input => {
+                attachSearchListener(input);
+            });
+            // Attach search functionality to each product input with debouncing
+            function attachSearchListener(inputElement) {
+                var debouncedSearch = debounce(async function(e) {
+                    const query = e.target.value;
+                    if (query.length < 2) {
+                        document.querySelector(`.search-results[data-item-id="${e.target.dataset.itemId}"]`).innerHTML = '';
+                        return;
+                    }
+    
+                    const response = await fetch(`/search-items/?query=${encodeURIComponent(query)}`);
+                    const items = await response.json();
+                    const resultsContainer = document.querySelector(`.search-results[data-item-id="${e.target.dataset.itemId}"]`);
+                    resultsContainer.innerHTML = '';
+                    items.forEach(item => {
+                        const div = document.createElement('div');
+                        div.textContent = item.name;
+                        div.className = 'search-result-item';
+                        div.style.cursor = 'pointer';
+                        div.onclick = function() {
+                            e.target.value = item.name;
+                            resultsContainer.innerHTML = '';
+                        };
+                        resultsContainer.appendChild(div);
+                    });
+                }, 250); // 250 milliseconds debounce time
+    
+                inputElement.addEventListener('input', debouncedSearch);
+                // 키보드 이벤트 리스너 추가
+                inputElement.addEventListener('keydown', function(e) {
+                    const resultsContainer = document.querySelector(`.search-results[data-item-id="${inputElement.dataset.itemId}"]`);
+                    searchResultsItems = Array.from(resultsContainer.children);
+
+                    if (e.keyCode === 40) { // 아래 화살표 키
+                        const nextIndex = (currentActiveIndex + 1) % searchResultsItems.length;
+                        updateActiveSearchItem(nextIndex);
+                        e.preventDefault(); // 스크롤 방지
+                    } else if (e.keyCode === 38) { // 위 화살표 키
+                        const prevIndex = (currentActiveIndex - 1 + searchResultsItems.length) % searchResultsItems.length;
+                        updateActiveSearchItem(prevIndex);
+                        e.preventDefault(); // 스크롤 방지
+                    } else if (e.keyCode === 13 && currentActiveIndex !== -1) { // Enter 키
+                        e.preventDefault(); // 폼 제출 방지
+                        inputElement.value = searchResultsItems[currentActiveIndex].textContent;
+                        resultsContainer.innerHTML = '';
+                        clearActiveSearchItem();
+                    }
+                });
+            }
+    
+            // Delete functionality for dynamically added rows
+            document.querySelector('form').addEventListener('click', function(event) {
+                if (event.target.classList.contains('remove-item')) {
+                    event.target.closest('.form-row').remove();
+                }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 화물유형 드롭다운 변경 이벤트 핸들러
+            var cargoTypeDropdown = document.getElementById('cargo_type');
+            var customCargoTypeDisplay = document.getElementById('customCargoTypeDisplay');
+            var customCargoTypeSpan = document.getElementById('customCargoType');
+            var form = document.querySelector('form');
+
+            cargoTypeDropdown.addEventListener('change', function() {
+                // 선택된 값 확인
+                var selectedValue = cargoTypeDropdown.value;
+
+                // 기타를 선택한 경우에 대한 처리
+                if (selectedValue === '기타') {
+                    // 사용자로부터 값을 입력받거나 다른 로직을 수행
+                    var customValue = prompt('기타 화물유형을 입력하세요:', '');
+
+                    // 값을 입력받았다면, 해당 값을 화면에 표시
+                    if (customValue !== null && customValue !== '') {
+                        customCargoTypeSpan.textContent = customValue;
+                        customCargoTypeDisplay.style.display = 'block';
+
+                        // hidden input을 생성하여 값을 폼으로 전송
+                        var hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = 'custom_cargo_type';
+                        hiddenInput.value = customValue;
+
+                        // 추가된 hidden input을 폼에 추가
+                        form.appendChild(hiddenInput);
+                    }
+                } else {
+                    // 기타가 아닌 경우, 표시된 값을 숨김
+                    customCargoTypeDisplay.style.display = 'none';
+
+                    // 기타가 아닌 경우, custom_cargo_type을 가지는 hidden input이 있다면 제거
+                    var existingHiddenInput = document.querySelector('input[name="custom_cargo_type"]');
+                    if (existingHiddenInput) {
+                        existingHiddenInput.remove();
+                    }
+                }
+            });
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var sidebar = document.getElementById('sidebar');
+            var mainContent = document.querySelector('.main-content');
+
+            sidebar.addEventListener('mouseover', function() {
+                mainContent.style.marginLeft = '250px';
+            });
+
+            sidebar.addEventListener('mouseout', function() {
+                mainContent.style.marginLeft = '0';
+            });
+        });
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Find the button or link for data query
+        var dataQueryButton = document.querySelector('a[href="/data-query"]');
+
+        dataQueryButton.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default link behavior
+
+            // Use Fetch API to request data from the server
+            fetch('/data-query')
+                .then(response => response.text()) // Convert the response to text (HTML)
+                .then(html => {
+                    // Select the element where you want to inject the HTML
+                    var contentContainer = document.querySelector('.main-content');
+                    contentContainer.innerHTML = html; // Inject the HTML
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        });
+    });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var sidebar = document.getElementById('sidebar');
+            var mainContent = document.querySelector('.main-content');
+
+            sidebar.addEventListener('mouseover', function() {
+                mainContent.style.marginLeft = '200px'; // 사이드바 확장 시 main-content의 marginLeft 조정
+            });
+
+            sidebar.addEventListener('mouseout', function() {
+                mainContent.style.marginLeft = '0px'; // 사이드바 축소 시 main-content의 marginLeft 조정
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var cargoTypeDropdown = document.getElementById('cargo_type');
+            var addressInput = document.getElementById('address');
+            var recipientInput = document.getElementById('recipient');
+            var phoneNumberInput = document.getElementById('phone_number');
+    
+            // 초기에도 한 번 실행하여 현재 값에 따라 입력란 상태를 설정합니다.
+            toggleInputs();
+    
+            cargoTypeDropdown.addEventListener('change', function() {
+                toggleInputs();
+            });
+    
+            function toggleInputs() {
+                if (cargoTypeDropdown.value === '우리차') {
+                    // 우리차일 때만 입력란을 비활성화합니다.
+                    addressInput.disabled = true;
+                    recipientInput.disabled = true;
+                    phoneNumberInput.disabled = true;
+    
+                    // 우리차일 때, 주소, 수신자 성명, 전화번호에 하이픈('-')으로 처리
+                    addressInput.value = '-';
+                    recipientInput.value = '-';
+                    phoneNumberInput.value = '-';
+                } else {
+                    addressInput.disabled = false;
+                    recipientInput.disabled = false;
+                    phoneNumberInput.disabled = false;
+    
+                    // 다른 화물 유형을 선택한 경우, 입력란을 비우거나 기존 값으로 설정
+                    addressInput.value = '';
+                    recipientInput.value = '';
+                    phoneNumberInput.value = '';
+                }
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var noteInput = document.getElementById('note');
+        
+            // 비고 입력란의 값이 변경될 때마다 호출되는 이벤트 핸들러 추가
+            noteInput.addEventListener('input', function() {
+                // 입력된 값이 비어 있는지 확인하여 공백 문자로 설정
+                if (noteInput.value === '') {
+                    noteInput.value = ' ';
+                }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function debounce(func, wait, immediate) {
+                var timeout;
+                return function() {
+                    var context = this, args = arguments;
+                    var later = function() {
+                        timeout = null;
+                        if (!immediate) func.apply(context, args);
+                    };
+                    var callNow = immediate && !timeout;
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                    if (callNow) func.apply(context, args);
+                };
+            }
+        
+            var currentActiveIndex = -1;
+            var searchResultsItems = [];
+        
+            var debouncedSearch = debounce(async function(e) {
+                const query = e.target.value;
+                if (query.length < 2) {
+                    document.getElementById('search-results').innerHTML = '';
+                    return;
+                }
+                const response = await fetch(`/search-items/?query=${encodeURIComponent(query)}`);
+                const items = await response.json();
+                const resultsContainer = document.getElementById('search-results');
+                resultsContainer.innerHTML = '';
+                items.forEach((item, index) => {
+                    const div = document.createElement('div');
+                    div.textContent = item.name;
+                    div.className = 'search-result-item';
+                    div.style.cursor = 'pointer';
+                    div.onclick = function() {
+                        e.target.value = item.name;
+                        resultsContainer.innerHTML = '';
+                    };
+                    resultsContainer.appendChild(div);
+                });
+                searchResultsItems = Array.from(resultsContainer.children);
+                currentActiveIndex = -1; // Reset the index whenever a new search is performed
+            }, 250);
+        
+            document.getElementById('product').addEventListener('input', debouncedSearch);
+        
+            document.getElementById('product').addEventListener('keydown', function(e) {
+                if (e.keyCode === 40) { // 아래 화살표 키
+                    const nextIndex = (currentActiveIndex + 1) % searchResultsItems.length;
+                    if(searchResultsItems[nextIndex]){
+                        searchResultsItems[currentActiveIndex]?.classList.remove('active');
+                        currentActiveIndex = nextIndex;
+                        searchResultsItems[currentActiveIndex].classList.add('active');
+                        searchResultsItems[currentActiveIndex].scrollIntoView({
+                            behavior: "smooth",
+                            block: "nearest",
+                        });
+                    }
+                    e.preventDefault();
+                } else if (e.keyCode === 38) { // 위 화살표 키
+                    const prevIndex = (currentActiveIndex - 1 + searchResultsItems.length) % searchResultsItems.length;
+                    if(searchResultsItems[prevIndex]){
+                        searchResultsItems[currentActiveIndex]?.classList.remove('active');
+                        currentActiveIndex = prevIndex;
+                        searchResultsItems[currentActiveIndex].classList.add('active');
+                        searchResultsItems[currentActiveIndex].scrollIntoView({
+                            behavior: "smooth",
+                            block: "nearest",
+                        });
+                    }
+                    e.preventDefault();
+                } else if (e.keyCode === 13 && currentActiveIndex !== -1) { // Enter 키
+                    e.target.value = searchResultsItems[currentActiveIndex].textContent;
+                    document.getElementById('search-results').innerHTML
+                    = '';
+                    // 현재 선택된 검색 결과 항목을 초기화
+                    searchResultsItems = [];
+                    currentActiveIndex = -1;
+                    e.preventDefault(); // 폼 제출 방지
+                }
+            });
+        });
+    </script>
+    <script>
+        function toggleSidebar() {
+            var sidebar = document.getElementById("sidebar");
+            sidebar.classList.toggle("active");
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            // 모바일 화면에서 사이드바 토글 버튼 보이기
+            var toggleSidebarButton = document.querySelector(".toggle-sidebar-btn");
+            toggleSidebarButton.style.display = "block";
+        });
+    </script>
+</body>
+<footer class="mt-5">
+    <p class="text-center text-muted">Copyright © 2024 abc Inc.</p>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var sidebar = document.getElementById('sidebar');
+            var footer = document.querySelector('footer');
+
+            sidebar.addEventListener('mouseover', function() {
+                footer.style.marginLeft = '250px';
+            });
+
+            sidebar.addEventListener('mouseout', function() {
+                footer.style.marginLeft = '0';
+            });
+        });
+    </script>
+</footer>
+</html>

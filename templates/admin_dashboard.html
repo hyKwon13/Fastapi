@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 대시보드</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 40px;
+        }
+        .company-name {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #007bff; /* 부트스트랩 파란색 */
+        }
+        .admin-dashboard {
+            max-width: 800px;
+            margin: auto;
+        }
+        .logo {
+            display: block;
+            margin: 0 auto 20px;
+            max-width: 200px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container admin-dashboard">
+        <img src="/static/123.png" alt="abc Logo" class="logo">
+        <h3 class="company-name">관리자 대시보드</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">사원명</th>
+                    <th scope="col">대리</th>
+                    <th scope="col">승인 상태</th>
+                    <th scope="col">작업</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <th scope="row">{{ loop.index }}</th>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.position }}</td>
+                    <td>{{ user.is_approved }}</td>
+                    <td>
+                        <form action="/admin/approve/{{ user.id }}" method="post" style="display: inline;" onsubmit="return confirm('정말 승인하시겠습니까?');">
+                            <button type="submit" class="btn btn-success btn-sm">승인</button>
+                        </form>
+                        <form action="/admin/delete/{{ user.id }}" method="post" style="display: inline;" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+                            <input type="hidden" name="user_id" value="{{ user.id }}">
+                            <button type="submit" class="btn btn-danger btn-sm">삭제</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
