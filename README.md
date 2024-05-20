@@ -1,3 +1,5 @@
+![Project Logo](doc/main.PNG)
+
 # Project Overview
 
 This project is a web application built using FastAPI. It provides a user interface for managing items, includes authentication, and supports real-time communication through WebSocket. The application uses SQLite as the database and is served by `uvicorn`. Nginx is used as a reverse proxy and to serve static files.
