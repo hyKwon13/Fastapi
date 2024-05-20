@@ -59,6 +59,7 @@ The architecture of this project includes the following components:
     |  HTML Templates  |                  |     API Routes    |                 |   DB Queries   |
     |  (Jinja2)        |                  |(user, item, admin)|                 |   (SQLAlchemy) |
     +------------------+                  +-------------------+                 +----------------+
+```
 
 ## Usage
 
