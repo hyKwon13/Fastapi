@@ -1,39 +1,39 @@
 ![Project Logo](doc/index.PNG)
 
-# Project Overview
+# 프로젝트 개요
 
-This project is a web application built using FastAPI. It provides a user interface for managing items, includes authentication, and supports real-time communication through WebSocket. The application uses SQLite as the database and is served by `uvicorn`. Nginx is used as a reverse proxy and to serve static files.
+이 프로젝트는 FastAPI를 사용하여 구축된 웹 애플리케이션입니다. 이 애플리케이션은 항목 관리를 위한 사용자 인터페이스를 제공하며, 인증 기능과 WebSocket을 통한 실시간 통신을 지원합니다. SQLite를 데이터베이스로 사용하며 `uvicorn`을 통해 서비스됩니다. Nginx는 리버스 프록시로 사용되어 정적 파일을 제공합니다.
 
-## Table of Contents
+## 목차
 
-- [Project Overview](#project-overview)
-- [Features](#features)
-- [Architecture](#architecture)
-- [Usage](#usage)
-- [Routes](#routes)
-- [Dependencies](#dependencies)
+- [프로젝트 개요](#프로젝트-개요)
+- [기능](#기능)
+- [아키텍처](#아키텍처)
+- [사용법](#사용법)
+- [라우트](#라우트)
+- [종속성](#종속성)
 
-## Features
+## 기능
 
-- User authentication and registration
-- Item management (add, update, list)
-- Admin dashboard for user management
-- Real-time notifications using WebSocket
-- Download data as CSV
-- Responsive HTML templates
+- 사용자 인증 및 등록
+- 항목 관리 (추가, 업데이트, 목록 보기)
+- 사용자 관리를 위한 관리자 대시보드
+- WebSocket을 통한 실시간 알림
+- CSV로 데이터 다운로드
+- 반응형 HTML 템플릿
 
-## Architecture
+## 아키텍처
 
-The architecture of this project includes the following components:
+이 프로젝트의 아키텍처는 다음 구성 요소를 포함합니다:
 
-1. **Client (Browser)**: The client sends HTTP requests and receives responses.
-2. **Nginx**: Acts as a reverse proxy to forward requests to the FastAPI application and serves static files.
-3. **FastAPI Application**: Handles the core logic of the application, including routing, database operations, and real-time communication.
-4. **Uvicorn**: An ASGI server used to run the FastAPI application.
-5. **SQLite**: The database used to store application data.
-6. **WebSocket**: Provides real-time communication capabilities.
+1. **클라이언트 (브라우저)**: 클라이언트는 HTTP 요청을 보내고 응답을 받습니다.
+2. **Nginx**: 요청을 FastAPI 애플리케이션으로 전달하고 정적 파일을 제공합니다.
+3. **FastAPI 애플리케이션**: 애플리케이션의 핵심 로직을 처리하며 라우팅, 데이터베이스 작업, 실시간 통신을 포함합니다.
+4. **Uvicorn**: FastAPI 애플리케이션을 실행하는 ASGI 서버입니다.
+5. **SQLite**: 애플리케이션 데이터를 저장하는 데이터베이스입니다.
+6. **WebSocket**: 실시간 통신 기능을 제공합니다.
 
-### Workflow Diagram
+### 워크플로우 다이어그램
 
 ```plaintext
 +-------------------+      +-------+       +----------------+      +--------+      +-----------+
@@ -61,49 +61,49 @@ The architecture of this project includes the following components:
     +------------------+                  +-------------------+                 +----------------+
 ```
 
-## Usage
+## 사용법
 
-Once the application is running, you can access it via your browser at [http://127.0.0.1:8000](http://127.0.0.1:8000).
+애플리케이션이 실행 중이면, 브라우저에서 [http://127.0.0.1:8000](http://127.0.0.1:8000)로 접속할 수 있습니다.
 
-- **Login**: `/login/`
-- **Register**: `/register/`
-- **Admin Dashboard**: `/admin/`
-- **Item Management**: Access the main page to view, add, and manage items.
+- **로그인**: `/login/`
+- **등록**: `/register/`
+- **관리자 대시보드**: `/admin/`
+- **항목 관리**: 메인 페이지에 접속하여 항목을 보고, 추가하고 관리할 수 있습니다.
 
-## Routes
+## 라우트
 
-### User Routes
+### 사용자 라우트
 
-- **GET** `/login/`: Render the login page.
-- **GET** `/register/`: Render the registration page.
-- **POST** `/register/`: Handle user registration.
-- **POST** `/token/`: Handle user login and return a JWT token.
-- **GET** `/logout/`: Log the user out by deleting the access token.
+- **GET** `/login/`: 로그인 페이지 렌더링
+- **GET** `/register/`: 등록 페이지 렌더링
+- **POST** `/register/`: 사용자 등록 처리
+- **POST** `/token/`: 사용자 로그인 처리 및 JWT 토큰 반환
+- **GET** `/logout/`: 액세스 토큰 삭제를 통해 사용자 로그아웃
 
-### Item Routes
+### 항목 라우트
 
-- **GET** `/`: Render the main item management page.
-- **POST** `/add_item/`: Add a new item.
-- **GET** `/items/`: List items created today.
-- **GET** `/items/by_date_range/`: List items by date range.
-- **GET** `/download_csv/`: Download items as a CSV file.
+- **GET** `/`: 메인 항목 관리 페이지 렌더링
+- **POST** `/add_item/`: 새 항목 추가
+- **GET** `/items/`: 오늘 생성된 항목 목록
+- **GET** `/items/by_date_range/`: 날짜 범위별 항목 목록
+- **GET** `/download_csv/`: 항목을 CSV 파일로 다운로드
 
-### Admin Routes
+### 관리자 라우트
 
-- **GET** `/admin/`: Render the admin dashboard.
-- **POST** `/admin/approve/{user_id}`: Approve a user.
-- **POST** `/admin/delete/{user_id}`: Delete a user.
-- **PUT** `/release_item/{grouped_item_id}`: Release grouped items.
+- **GET** `/admin/`: 관리자 대시보드 렌더링
+- **POST** `/admin/approve/{user_id}`: 사용자 승인
+- **POST** `/admin/delete/{user_id}`: 사용자 삭제
+- **PUT** `/release_item/{grouped_item_id}`: 그룹화된 항목 릴리스
 
-### WebSocket Routes
+### WebSocket 라우트
 
-- **GET** `/ws`: WebSocket endpoint for real-time notifications.
+- **GET** `/ws`: 실시간 알림을 위한 WebSocket 엔드포인트
 
-## Dependencies
+## 종속성
 
-- **FastAPI**: Web framework for building APIs.
-- **Uvicorn**: ASGI server to run FastAPI.
-- **SQLAlchemy**: ORM for database operations.
-- **Jinja2**: Templating engine for rendering HTML pages.
-- **Nginx**: Web server and reverse proxy.
-- **SQLite**: Database for storing application data.
+- **FastAPI**: API를 구축하기 위한 웹 프레임워크
+- **Uvicorn**: FastAPI를 실행하기 위한 ASGI 서버
+- **SQLAlchemy**: 데이터베이스 작업을 위한 ORM
+- **Jinja2**: HTML 페이지를 렌더링하기 위한 템플릿 엔진
+- **Nginx**: 웹 서버 및 리버스 프록시
+- **SQLite**: 애플리케이션 데이터를 저장하기 위한 데이터베이스
