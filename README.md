@@ -9,11 +9,9 @@ This project is a web application built using FastAPI. It provides a user interf
 - [Project Overview](#project-overview)
 - [Features](#features)
 - [Architecture](#architecture)
-- [Setup Instructions](#setup-instructions)
 - [Usage](#usage)
 - [Routes](#routes)
 - [Dependencies](#dependencies)
-- [License](#license)
 
 ## Features
 
@@ -40,7 +38,7 @@ The architecture of this project includes the following components:
 ```plaintext
 +-------------------+      +-------+       +----------------+      +--------+      +-----------+
 |                   |      |       |       |                |      |        |      |           |
-|   Client Browser  +------> Nginx +-------> FastAPI (app)  +------> Uvicorn +------> SQLite DB |
+|   Client Browser  +------> Nginx +-------> FastAPI (app)  +------> Uvicorn+------> SQLite DB |
 |                   |      |       |       |                |      |        |      |           |
 |  (HTTP Requests)  |      |       |       |    (ASGI App)  |      |        |      |           |
 +-------------------+      +-------+       +----------------+      +--------+      +-----------+
@@ -51,13 +49,60 @@ The architecture of this project includes the following components:
              |                    |                    |                   |               |
              |                    v                    |                   v               |
              |          +------------------+           |           +----------------+      |
-             |          |  Static Files    |           |           |                |      |
-             |          |  (CSS, JS, etc.) |           |           |   WebSocket    |      |
-             |          +------------------+           |           |                |      |
-             |                                         |           +----------------+      |
-             |                                         |                                    |
-             v                                         v                                    v
+             |          |  Static Files    |           |           |   WebSocket    |      |
+             |          |  (CSS, JS, etc.) |           |           |                |      |
+             |          +------------------+           |           +----------------+      |
+             |                                         |                                   |
+             |                                         |                                   |
+             v                                         v                                   v
     +------------------+                  +-------------------+                 +----------------+
     |  HTML Templates  |                  |     API Routes    |                 |   DB Queries   |
-    |  (Jinja2)        |                  |  (user, item, admin)|                 |   (SQLAlchemy) |
+    |  (Jinja2)        |                  |(user, item, admin)|                 |   (SQLAlchemy) |
     +------------------+                  +-------------------+                 +----------------+
+
+## Usage
+
+Once the application is running, you can access it via your browser at [http://127.0.0.1:8000](http://127.0.0.1:8000).
+
+- **Login**: `/login/`
+- **Register**: `/register/`
+- **Admin Dashboard**: `/admin/`
+- **Item Management**: Access the main page to view, add, and manage items.
+
+## Routes
+
+### User Routes
+
+- **GET** `/login/`: Render the login page.
+- **GET** `/register/`: Render the registration page.
+- **POST** `/register/`: Handle user registration.
+- **POST** `/token/`: Handle user login and return a JWT token.
+- **GET** `/logout/`: Log the user out by deleting the access token.
+
+### Item Routes
+
+- **GET** `/`: Render the main item management page.
+- **POST** `/add_item/`: Add a new item.
+- **GET** `/items/`: List items created today.
+- **GET** `/items/by_date_range/`: List items by date range.
+- **GET** `/download_csv/`: Download items as a CSV file.
+
+### Admin Routes
+
+- **GET** `/admin/`: Render the admin dashboard.
+- **POST** `/admin/approve/{user_id}`: Approve a user.
+- **POST** `/admin/delete/{user_id}`: Delete a user.
+- **PUT** `/release_item/{grouped_item_id}`: Release grouped items.
+
+### WebSocket Routes
+
+- **GET** `/ws`: WebSocket endpoint for real-time notifications.
+
+## Dependencies
+
+- **FastAPI**: Web framework for building APIs.
+- **Uvicorn**: ASGI server to run FastAPI.
+- **SQLAlchemy**: ORM for database operations.
+- **Jinja2**: Templating engine for rendering HTML pages.
+- **Nginx**: Web server and reverse proxy.
+- **SQLite**: Database for storing application data.
