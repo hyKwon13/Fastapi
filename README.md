@@ -59,3 +59,77 @@ The architecture of this project includes the following components:
     |  HTML Templates  |                  |     API Routes    |                 |   DB Queries   |
     |  (Jinja2)        |                  |  (user, item, admin)|                 |   (SQLAlchemy) |
     +------------------+                  +-------------------+                 +----------------+
+
+Setup Instructions
+Clone the repository:
+
+bash
+코드 복사
+git clone https://github.com/yourusername/yourrepository.git
+cd yourrepository
+Create a virtual environment and activate it:
+
+bash
+코드 복사
+python -m venv venv
+source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+Install dependencies:
+
+bash
+코드 복사
+pip install -r requirements.txt
+Set up the database:
+
+bash
+코드 복사
+python -m app.database
+Run the application:
+
+bash
+코드 복사
+uvicorn app.main:app --reload
+Configure Nginx:
+
+Ensure Nginx is installed on your system.
+Configure Nginx to serve as a reverse proxy for the FastAPI application and serve static files.
+Usage
+Once the application is running, you can access it via your browser at http://127.0.0.1:8000.
+
+Login: /login/
+Register: /register/
+Admin Dashboard: /admin/
+Item Management: Access the main page to view, add, and manage items.
+Routes
+User Routes
+GET /login/: Render the login page.
+GET /register/: Render the registration page.
+POST /register/: Handle user registration.
+POST /token/: Handle user login and return a JWT token.
+GET /logout/: Log the user out by deleting the access token.
+Item Routes
+GET /: Render the main item management page.
+POST /add_item/: Add a new item.
+GET /items/: List items created today.
+GET /items/by_date_range/: List items by date range.
+GET /download_csv/: Download items as a CSV file.
+Admin Routes
+GET /admin/: Render the admin dashboard.
+POST /admin/approve/{user_id}: Approve a user.
+POST /admin/delete/{user_id}: Delete a user.
+PUT /release_item/{grouped_item_id}: Release grouped items.
+WebSocket Routes
+GET /ws: WebSocket endpoint for real-time notifications.
+Dependencies
+FastAPI: Web framework for building APIs.
+Uvicorn: ASGI server to run FastAPI.
+SQLAlchemy: ORM for database operations.
+Jinja2: Templating engine for rendering HTML pages.
+Nginx: Web server and reverse proxy.
+SQLite: Database for storing application data.
+License
+This project is licensed under the MIT License.
+
+css
+코드 복사
+
+This markdown provides a comprehensive overview of your FastAPI applica
