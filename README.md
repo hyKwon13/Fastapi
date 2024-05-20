@@ -1,4 +1,4 @@
-![Project Logo](doc/main.PNG)
+![Project Logo](doc/index.PNG)
 
 # Project Overview
 
