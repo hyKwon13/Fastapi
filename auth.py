@@ -2,7 +2,7 @@ import bcrypt
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from .dependencies import get_current_user
-import secrets
+import secrets 
 
 SECRET_KEY = secrets.token_urlsafe(32)
 
