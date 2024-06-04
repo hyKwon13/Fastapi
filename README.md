@@ -1,5 +1,5 @@
 ![Project Logo](doc/index.PNG)
- 
+  
 # 프로젝트 개요
 
 이 프로젝트는 FastAPI를 사용한 구축된 출고 관리 시스템입니다. 웹 애플리케이션(경리부)에서 출고 요청 시 WebSocket을 통해 클라이언트(자재과)로 전송됩니다. 이후 클라이언트에서 출고 작업 후 출고 완료 및 출고 불가 처리를 하면 웹 애플리케이션에 해당 정보가 전송됩니다. SQLite를 데이터베이스로 사용하며 'uvicorn'을 통해 서비스 됩니다. NginX는 리버스 프록시로 사용되어 정적 파일을 제공합니다. NCP(https://www.ncloud.com/) 에 클라우드 기반 서버를 구축하고 SSL 인증서는 Let's Encrypt(https://letsencrypt.org/) 를 통해 발급받았습니다.
